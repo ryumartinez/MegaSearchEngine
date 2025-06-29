@@ -11,4 +11,8 @@
         <PackageReference Include="Scalar.AspNetCore"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Utils\Utils.csproj" />
+    </ItemGroup>
+
 </Project>

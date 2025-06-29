@@ -1,4 +1,8 @@
+using Utils;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
 
 builder.Services
     .AddReverseProxy()
