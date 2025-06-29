@@ -1,3 +1,4 @@
+using Api.Endpoints;
 using Scalar.AspNetCore;
 using Utils;
 
@@ -9,6 +10,9 @@ builder.AddServiceDefaults();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+Manager.ServiceInjection.ConfigureServices(builder.Services);
+DataAccess.ServiceInjection.ConfigureServices(builder.Services);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -16,6 +20,8 @@ app.MapOpenApi();
 app.MapScalarApiReference();
 
 app.UseHttpsRedirection();
+
+app.MapSearchEndpoints();
 
 var summaries = new[]
 {
