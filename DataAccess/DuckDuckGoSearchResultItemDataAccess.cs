@@ -4,7 +4,17 @@ namespace DataAccess;
 
 public class DuckDuckGoSearchResultItemDataAccess : ISearchResultItemDataAccess
 {
-    public Task<IEnumerable<SearchResultItemAccessModel>> GetAsync(GetSearchResultItemAccessRequest request)
+    public Task<IEnumerable<SearchResultArticleAccessModel>> GetArticlesAsync(GetSearchResultItemAccessRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<SearchResultImageAccessModel>> GetImagesAsync(GetSearchResultItemAccessRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<SearchResultVideoAccessModel>> GetVideosAsync(GetSearchResultItemAccessRequest request)
     {
         throw new NotImplementedException();
     }

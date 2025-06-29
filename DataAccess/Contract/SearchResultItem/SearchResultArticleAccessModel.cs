@@ -1,3 +1,3 @@
 namespace DataAccess.Contract.SearchResultItem;
 
-public record SearchResultItemAccessModel();
+public record SearchResultArticleAccessModel();
