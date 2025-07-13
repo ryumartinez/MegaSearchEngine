@@ -12,4 +12,9 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+      <ProjectReference Include="..\Utils\Utils.csproj" />
+    </ItemGroup>
+
 </Project>
