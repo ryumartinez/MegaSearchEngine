@@ -10,5 +10,9 @@ public static class ServiceInjection
         services.AddKeyedScoped<ISearchDataAccess, GoogleSearchDataAccess>("google");
         services.AddKeyedScoped<ISearchDataAccess, BingSearchDataAccess>("bing");
         services.AddKeyedScoped<ISearchDataAccess, DuckDuckGoSearchDataAccess>("duckduckgo");
+        services.AddKeyedScoped<ISearchDataAccess, PuntoFarmaSearchDataAccess>("puntofarma");
+        services.AddKeyedScoped<ISearchDataAccess, FarmacenterSearchDataAccess>("farmacenter");
+        services.AddKeyedScoped<ISearchDataAccess, FarmaTotalSearchDataAccess>("farmatotal");
+        services.AddKeyedScoped<ISearchDataAccess, FarmaOlivaSearchDataAccess>("farmaoliva");
     }
 }
