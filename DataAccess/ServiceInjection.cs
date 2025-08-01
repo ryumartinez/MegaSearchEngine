@@ -7,8 +7,8 @@ public static class ServiceInjection
 {
     public static void ConfigureServices(IServiceCollection services)
     { 
-        services.AddKeyedScoped<ISearchResultItemDataAccess, GoogleSearchResultItemDataAccess>("google");
-        services.AddKeyedScoped<ISearchResultItemDataAccess, BingSearchResultItemDataAccess>("bing");
-        services.AddKeyedScoped<ISearchResultItemDataAccess, DuckDuckGoSearchResultItemDataAccess>("duckduckgo");
+        services.AddKeyedScoped<ISearchDataAccess, GoogleSearchDataAccess>("google");
+        services.AddKeyedScoped<ISearchDataAccess, BingSearchDataAccess>("bing");
+        services.AddKeyedScoped<ISearchDataAccess, DuckDuckGoSearchDataAccess>("duckduckgo");
     }
 }

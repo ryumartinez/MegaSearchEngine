@@ -5,39 +5,27 @@ using Microsoft.Extensions.Configuration;
 
 namespace DataAccess;
 
-public class BingSearchResultItemDataAccess : ISearchResultItemDataAccess
+public class BingSearchDataAccess : ISearchDataAccess
 {
     private readonly HttpClient _httpClient;
     private readonly string _apiKey;
 
-    public BingSearchResultItemDataAccess(HttpClient httpClient, IConfiguration config)
+    public BingSearchDataAccess(HttpClient httpClient, IConfiguration config)
     {
         _httpClient = httpClient;
         _apiKey = config["Bing:ApiKey"] ?? throw new InvalidOperationException("Bing API key not configured.");
         _httpClient.DefaultRequestHeaders.Add("Ocp-Apim-Subscription-Key", _apiKey);
     }
 
-    public async Task<IEnumerable<SearchResultArticleAccessModel>> GetArticlesAsync(GetSearchResultItemAccessRequest request)
+    public async Task<IEnumerable<SearchResultAccessModel>> SearchAsync(SearchAccessRequest request)
     {
         var url = BuildSearchUrl(request.SearchText);
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
-        // TODO: Deserialize and map to SearchResultArticleAccessModel
-        return Enumerable.Empty<SearchResultArticleAccessModel>();
-    }
-
-    public Task<IEnumerable<SearchResultImageAccessModel>> GetImagesAsync(GetSearchResultItemAccessRequest request)
-    {
-        // Use Bing Image Search API
-        return Task.FromResult(Enumerable.Empty<SearchResultImageAccessModel>());
-    }
-
-    public Task<IEnumerable<SearchResultVideoAccessModel>> GetVideosAsync(GetSearchResultItemAccessRequest request)
-    {
-        // Use Bing Video Search API
-        return Task.FromResult(Enumerable.Empty<SearchResultVideoAccessModel>());
+        // TODO: Deserialize and map to SearchResultAccessModel
+        return Enumerable.Empty<SearchResultAccessModel>();
     }
 
     private string BuildSearchUrl(string query)
