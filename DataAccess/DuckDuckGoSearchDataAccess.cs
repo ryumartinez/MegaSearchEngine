@@ -6,15 +6,14 @@ using Microsoft.Extensions.Configuration;
 
 namespace DataAccess;
 
-public class DuckDuckGoSearchDataAccess : ISearchDataAccess
+public class DuckDuckGoSearchDataAccess(HttpClient httpClient) : ISearchDataAccess
 {
     public async Task<IEnumerable<SearchResultAccessModel>> SearchAsync(SearchAccessRequest request)
     {
         var baseUrl = "https://html.duckduckgo.com/html/";
         var query = Uri.EscapeDataString(request.SearchText);
         var page = int.TryParse(request.PageIndex, out var pageIndex) ? pageIndex : 0;
-
-        var httpClient = new HttpClient();
+        
         var formData = new FormUrlEncodedContent(new[]
         {
             new KeyValuePair<string, string>("q", request.SearchText),

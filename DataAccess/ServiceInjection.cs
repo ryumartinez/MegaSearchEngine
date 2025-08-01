@@ -7,6 +7,7 @@ public static class ServiceInjection
 {
     public static void ConfigureServices(IServiceCollection services)
     { 
+        services.AddHttpClient();
         services.AddKeyedScoped<ISearchDataAccess, GoogleSearchDataAccess>("google");
         services.AddKeyedScoped<ISearchDataAccess, BingSearchDataAccess>("bing");
         services.AddKeyedScoped<ISearchDataAccess, DuckDuckGoSearchDataAccess>("duckduckgo");

@@ -3,14 +3,13 @@ using HtmlAgilityPack;
 
 namespace DataAccess;
 
-public class PuntoFarmaSearchDataAccess : ISearchDataAccess
+public class PuntoFarmaSearchDataAccess(HttpClient httpClient) : ISearchDataAccess
 {
     public async Task<IEnumerable<SearchResultAccessModel>> SearchAsync(SearchAccessRequest request)
     {
         var baseUrl = "https://www.puntofarma.com.py/buscar"; // Adjust to the real search URL
         var searchUrl = $"{baseUrl}?q={Uri.EscapeDataString(request.SearchText)}&page={request.PageIndex}&size={request.PageSize}";
-
-        using var httpClient = new HttpClient();
+        
         httpClient.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0");
 
         var html = await httpClient.GetStringAsync(searchUrl);

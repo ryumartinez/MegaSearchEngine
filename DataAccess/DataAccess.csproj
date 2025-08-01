@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <PackageReference Include="HtmlAgilityPack" />
+      <PackageReference Include="Microsoft.Extensions.Http" />
     </ItemGroup>
 
 </Project>

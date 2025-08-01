@@ -9,7 +9,6 @@ builder.AddServiceDefaults();
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
-
 Manager.ServiceInjection.ConfigureServices(builder.Services);
 DataAccess.ServiceInjection.ConfigureServices(builder.Services);
 
