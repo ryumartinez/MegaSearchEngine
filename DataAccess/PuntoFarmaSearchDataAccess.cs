@@ -34,8 +34,14 @@ public class PuntoFarmaSearchDataAccess(IBrowserFactory browser) : ISearchDataAc
                 var title = await titleElement?.InnerTextAsync() ?? string.Empty;
                 var relativeLink = await linkElement?.GetAttributeAsync("href") ?? string.Empty;
 
-                // The product cards don't have a separate description, so we'll use the title.
-                var description = title;
+                // --- MODIFIED: Get the price and use it as the description ---
+                var priceAfterDiscountElement = await element.QuerySelectorAsync("span.precios_precioConDescuentoConPromoForma__2f14y");
+                var normalPrice = await element.QuerySelectorAsync("del.precios_precioSinDescuento__O97at");
+                var priceAfterDiscountText = await priceAfterDiscountElement?.InnerTextAsync() ?? string.Empty;
+                var normalPriceText = await normalPrice?.InnerTextAsync() ?? string.Empty;
+                
+                // Use the extracted price as the description.
+                var description = $"Precio sin descuento: {normalPriceText} , Precio con descuento:{priceAfterDiscountText}";
                 
                 if (!string.IsNullOrWhiteSpace(relativeLink) && !string.IsNullOrWhiteSpace(title))
                 {
