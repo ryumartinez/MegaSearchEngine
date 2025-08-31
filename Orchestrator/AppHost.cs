@@ -3,11 +3,13 @@ var builder = DistributedApplication.CreateBuilder(args);
 var keyVault = builder.AddAzureKeyVault("my-api-secrets");
 
 var playwrightBrowser = builder
-    .AddContainer("playwright-browser", "mcr.microsoft.com/playwright", "v1.55.0-noble")
+    .AddContainer("playwright-browser", "mcr.microsoft.com/playwright", "v1.54.0-noble")
     .WithContainerRuntimeArgs("--ipc=host", "--init", "--user", "pwuser")
     .WithHttpEndpoint(targetPort: 9222, name: "cdp")
     .WithEntrypoint("/bin/sh")
-    .WithArgs("-c", "npx playwright run-server --port=9222 --host=0.0.0.0");
+    // --- THIS IS THE FIX ---
+    // Explicitly tell npx to use version 1.54.0 to match your client NuGet package.
+    .WithArgs("-c", "npx playwright@1.54.0 run-server --port=9222 --host=0.0.0.0");
 
 var api = builder
     .AddProject<Projects.Api>("api")
