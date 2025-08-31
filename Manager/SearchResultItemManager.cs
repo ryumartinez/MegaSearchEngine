@@ -7,13 +7,14 @@ namespace Manager;
 public class SearchResultItemManager(
     [FromKeyedServices("duckduckgo")] ISearchDataAccess duckDuckGoSearchDataAccess,
     [FromKeyedServices("puntofarma")] ISearchDataAccess puntoFarmaSearchDataAccess,
-    [FromKeyedServices("farmacenter")] ISearchDataAccess farmacenterSearchDataAccess
+    [FromKeyedServices("farmacenter")] ISearchDataAccess farmaCenterSearchDataAccess,
+    [FromKeyedServices("farmatotal")] ISearchDataAccess farmaTotalSearchDataAccess
     ) : ISearchResultItemManager
 {
     public async Task<IEnumerable<SearchResultItemModel>> GetAsync(string searchText)
     {
         var request = new SearchAccessRequest(1,1, searchText);
-        var result = await farmacenterSearchDataAccess.SearchAsync(request);
+        var result = await farmaTotalSearchDataAccess.SearchAsync(request);
         var mappedResult = result
             .Select(x => 
                 new SearchResultItemModel(
