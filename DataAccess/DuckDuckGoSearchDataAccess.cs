@@ -3,7 +3,7 @@ using DataAccess.Infrastructure;
 using Microsoft.Playwright;
 
 namespace DataAccess;
-
+//TODO: Bypass captcha
 public class DuckDuckGoSearchDataAccess(IBrowserFactory browser) : ISearchDataAccess
 {
     public async Task<IEnumerable<SearchResultItemAccessModel>> SearchAsync(SearchAccessRequest request)

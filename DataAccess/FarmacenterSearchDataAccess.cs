@@ -4,6 +4,7 @@ using Microsoft.Playwright;
 
 namespace DataAccess;
 
+//TODO: Bypass Site Block
 public class FarmacenterSearchDataAccess(IBrowserFactory browser) : ISearchDataAccess
 {
     private const string BaseUrl = "https://www.farmacenter.com.py";
