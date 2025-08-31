@@ -23,8 +23,19 @@ public static class PlaywrightBrowserFactory
             
             async Task<IBrowser> CreateBrowserAsync()
             {
+                // --- THIS IS THE FIX ---
+                // The 'playwright run-server' command provides a Playwright-specific WebSocket endpoint,
+                // not a standard CDP/JSON endpoint. We must use ConnectAsync() and a 'ws://' scheme.
+                
+                var httpEndpoint = playwrightOptions.CdpEndpoint;
+                var wsEndpoint = $"ws://{new Uri(httpEndpoint).Authority}";
+
+                Console.WriteLine($"Attempting to connect to Playwright server at: {wsEndpoint}");
+
                 var playwright = await Playwright.CreateAsync();
-                return await playwright.Chromium.ConnectOverCDPAsync(playwrightOptions.CdpEndpoint);
+                
+                // Use ConnectAsync for Playwright servers, not ConnectOverCDPAsync
+                return await playwright.Chromium.ConnectAsync(wsEndpoint);
             }
 
             return CreateBrowserAsync();
