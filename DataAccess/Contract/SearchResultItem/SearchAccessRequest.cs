@@ -1,7 +1,7 @@
 namespace DataAccess.Contract.SearchResultItem;
 
 public record SearchAccessRequest(
-    string PageSize,
-    string PageIndex,
+    int PageSize,
+    int PageIndex,
     string SearchText
     );

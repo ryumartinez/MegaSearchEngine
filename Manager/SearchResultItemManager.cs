@@ -1,11 +1,24 @@
+using DataAccess.Contract.SearchResultItem;
 using Manager.Contract;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Manager;
 
-public class SearchResultItemManager : ISearchResultItemManager
+public class SearchResultItemManager(
+    [FromKeyedServices("duckduckgo")] ISearchDataAccess duckDuckGoSearchDataAccess
+    ) : ISearchResultItemManager
 {
-    public Task<IEnumerable<SearchResultItemModel>> GetAsync(GetSearchResultItemRequest request)
+    public async Task<IEnumerable<SearchResultItemModel>> GetAsync(string searchText)
     {
-        throw new NotImplementedException();
+        var request = new SearchAccessRequest(1,1, searchText);
+        var result = await duckDuckGoSearchDataAccess.SearchAsync(request);
+        var mappedResult = result
+            .Select(x => 
+                new SearchResultItemModel(
+                    x.Title,
+                    x.Description,
+                    x.Link
+                    ));
+        return mappedResult;
     }
 }

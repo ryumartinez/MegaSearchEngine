@@ -1,3 +1,6 @@
 namespace Manager.Contract;
 
-public record SearchResultItemModel();
+public record SearchResultItemModel(
+    string Title,
+    string Description,
+    string Link);
