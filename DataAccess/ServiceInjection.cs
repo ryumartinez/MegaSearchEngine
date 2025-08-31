@@ -1,12 +1,15 @@
 ﻿using DataAccess.Contract.SearchResultItem;
+using DataAccess.Infrastructure;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DataAccess;
 
 public static class ServiceInjection
 {
-    public static void ConfigureServices(IServiceCollection services)
+    public static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     { 
+        services.AddPlaywrightBrowserFactory(configuration);
         services.AddHttpClient();
         services.AddKeyedScoped<ISearchDataAccess, GoogleSearchDataAccess>("google");
         services.AddKeyedScoped<ISearchDataAccess, BingSearchDataAccess>("bing");
