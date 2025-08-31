@@ -18,15 +18,15 @@ public class GoogleSearchDataAccess : ISearchDataAccess
         _cseId = config["Google:CseId"] ?? throw new InvalidOperationException("Google CSE ID not configured.");
     }
 
-    public async Task<IEnumerable<SearchResultAccessModel>> SearchAsync(SearchAccessRequest request)
+    public async Task<IEnumerable<SearchResultItemAccessModel>> SearchAsync(SearchAccessRequest request)
     {
         var url = BuildSearchUrl(request.SearchText, request.PageIndex, request.PageSize);
         var response = await _httpClient.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
         var json = await response.Content.ReadAsStringAsync();
-        // TODO: Deserialize and map to SearchResultAccessModel
-        return Enumerable.Empty<SearchResultAccessModel>();
+        // TODO: Deserialize and map to SearchResultItemAccessModel
+        return Enumerable.Empty<SearchResultItemAccessModel>();
     }
 
     private string BuildSearchUrl(string query, string pageIndex, string pageSize)

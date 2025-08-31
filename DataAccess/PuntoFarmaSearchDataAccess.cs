@@ -5,7 +5,7 @@ namespace DataAccess;
 
 public class PuntoFarmaSearchDataAccess(HttpClient httpClient) : ISearchDataAccess
 {
-    public async Task<IEnumerable<SearchResultAccessModel>> SearchAsync(SearchAccessRequest request)
+    public async Task<IEnumerable<SearchResultItemAccessModel>> SearchAsync(SearchAccessRequest request)
     {
         var baseUrl = "https://www.puntofarma.com.py/buscar"; // Adjust to the real search URL
         var searchUrl = $"{baseUrl}?q={Uri.EscapeDataString(request.SearchText)}&page={request.PageIndex}&size={request.PageSize}";
@@ -35,7 +35,7 @@ public class PuntoFarmaSearchDataAccess(HttpClient httpClient) : ISearchDataAcce
                 link = "https://www.puntofarma.com.py" + link;
             }
 
-            return new SearchResultAccessModel(title, description, link);
+            return new SearchResultItemAccessModel(title, description, link);
         });
 
         return results;

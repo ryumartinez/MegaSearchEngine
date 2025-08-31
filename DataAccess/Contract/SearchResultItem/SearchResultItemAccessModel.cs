@@ -1,6 +1,6 @@
 namespace DataAccess.Contract.SearchResultItem;
 
-public record SearchResultAccessModel(
+public record SearchResultItemAccessModel(
     string Title,
     string Description,
     string Link

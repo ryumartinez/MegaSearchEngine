@@ -2,5 +2,5 @@ namespace DataAccess.Contract.SearchResultItem;
 
 public interface ISearchDataAccess
 { 
-    Task<IEnumerable<SearchResultAccessModel>> SearchAsync(SearchAccessRequest request);
+    Task<IEnumerable<SearchResultItemAccessModel>> SearchAsync(SearchAccessRequest request);
 }

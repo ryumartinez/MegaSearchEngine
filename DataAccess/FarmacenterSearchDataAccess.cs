@@ -4,7 +4,7 @@ namespace DataAccess;
 
 public class FarmacenterSearchDataAccess : ISearchDataAccess
 {
-    public Task<IEnumerable<SearchResultAccessModel>> SearchAsync(SearchAccessRequest request)
+    public Task<IEnumerable<SearchResultItemAccessModel>> SearchAsync(SearchAccessRequest request)
     {
         throw new NotImplementedException();
     }
