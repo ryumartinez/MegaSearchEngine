@@ -18,5 +18,6 @@ public static class ServiceInjection
         services.AddKeyedScoped<ISearchDataAccess, FarmacenterSearchDataAccess>("farmacenter");
         services.AddKeyedScoped<ISearchDataAccess, FarmaTotalSearchDataAccess>("farmatotal");
         services.AddKeyedScoped<ISearchDataAccess, FarmaOlivaSearchDataAccess>("farmaoliva");
+        services.AddKeyedScoped<ISearchDataAccess, BiggieSearchDataAccess>("biggie");
     }
 }
