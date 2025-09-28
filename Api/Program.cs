@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 Manager.ServiceInjection.ConfigureServices(builder.Services);
-DataAccess.ServiceInjection.ConfigureServices(builder.Services, builder.Configuration);
 
 var app = builder.Build();
 

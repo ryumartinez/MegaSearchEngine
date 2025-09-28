@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints;
 
-public static class SearchEndpoints
+internal static class SearchEndpoints
 {
     public static void MapSearchEndpoints(this IEndpointRouteBuilder app)
     {
@@ -13,7 +13,7 @@ public static class SearchEndpoints
     
     private static async Task<IResult> Search(ISearchResultItemManager searchResultItemManager, [FromQuery] string searchText)
     {
-        var result = await searchResultItemManager.GetAsync(searchText);
+        var result = await searchResultItemManager.GetAsync(searchText).ConfigureAwait(false);
         return Results.Ok(result);
     }
 }
