@@ -28,8 +28,8 @@ public class PuntoFarmaSearchSearchScrapper(IBrowserFactory browser) : IEcommerc
             
             var priceAfterDiscountElement = await element.QuerySelectorAsync("span.precios_precioConDescuentoConPromoForma__2f14y").ConfigureAwait(false);
             var normalPrice = await element.QuerySelectorAsync("del.precios_precioSinDescuento__O97at").ConfigureAwait(false);
-            var priceAfterDiscountText = await (priceAfterDiscountElement?.InnerTextAsync()!).ConfigureAwait(false) ?? string.Empty;
-            var normalPriceText = await (normalPrice?.InnerTextAsync()!).ConfigureAwait(false) ?? string.Empty;
+            var priceAfterDiscountText = priceAfterDiscountElement is not null ? await priceAfterDiscountElement.InnerTextAsync().ConfigureAwait(false) : string.Empty;
+            var normalPriceText = normalPrice is not null ? await normalPrice.InnerTextAsync().ConfigureAwait(false) : string.Empty;
             
             var description = $"Precio sin descuento: {normalPriceText} , Precio con descuento:{priceAfterDiscountText}";
             

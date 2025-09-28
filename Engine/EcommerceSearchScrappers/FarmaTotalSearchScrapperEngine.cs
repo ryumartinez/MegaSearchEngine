@@ -25,12 +25,12 @@ public class FarmaTotalSearchScrapperEngine(IBrowserFactory browser) : IEcommerc
         {
             // Extract the title from the h3 tag
             var titleElement = await element.QuerySelectorAsync("h3.product-title a").ConfigureAwait(false);
-            var title = await (titleElement?.InnerTextAsync()!).ConfigureAwait(false) ?? string.Empty;
-            var link = await (titleElement?.GetAttributeAsync("href")!).ConfigureAwait(false) ?? string.Empty;
+            var title = titleElement is not null ? await titleElement.InnerTextAsync().ConfigureAwait(false) : string.Empty;
+            var link = titleElement is not null ? await titleElement.GetAttributeAsync("href").ConfigureAwait(false) : string.Empty;
 
             // Extract the final "Web Price" which is inside an <ins> tag
             var priceElement = await element.QuerySelectorAsync("span.price ins span.woocommerce-Price-amount bdi").ConfigureAwait(false);
-            var priceText = await (priceElement?.InnerTextAsync()!).ConfigureAwait(false) ?? string.Empty;
+            var priceText = priceElement is not null ? await priceElement.InnerTextAsync().ConfigureAwait(false) : string.Empty;
                 
             // Use the extracted price as the description.
             var description = priceText;

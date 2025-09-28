@@ -24,11 +24,11 @@ public class BiggieSearchScrapperEngine(IBrowserFactory browser) : IEcommerceSea
         {
             // Extract the title
             var titleElement = await element.QuerySelectorAsync("div.v-card__title.titleCard").ConfigureAwait(false);
-            var title = await (titleElement?.InnerTextAsync()!).ConfigureAwait(false);
+            var title = titleElement is not null ? await titleElement.InnerTextAsync().ConfigureAwait(false) : string.Empty;
 
             // Extract the final discounted price. It's the second span inside the price container div.
             var priceElement = await element.QuerySelectorAsync("div.v-card__text span:nth-child(2)").ConfigureAwait(false);
-            var priceText = await (priceElement?.InnerTextAsync()!).ConfigureAwait(false);
+            var priceText = priceElement is not null ? await priceElement.InnerTextAsync().ConfigureAwait(false) : string.Empty;
                 
             // Use the extracted price as the description.
             var description = priceText;
