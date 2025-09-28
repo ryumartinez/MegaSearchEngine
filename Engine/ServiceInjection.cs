@@ -10,7 +10,7 @@ public static class ServiceInjection
     public static void ConfigureServices(IServiceCollection services)
     { 
         services.AddPlaywrightBrowserFactory();
-        services.AddKeyedScoped<IEcommerceSearchScrapperEngine, PuntoFarmaSearchSearchScrapper>("puntofarma");
+        services.AddKeyedScoped<IEcommerceSearchScrapperEngine, PuntoFarmaSearchSearchScrapper>("puntoFarma");
         services.AddKeyedScoped<IEcommerceSearchScrapperEngine, FarmaTotalSearchScrapperEngine>("farmaTotal");
         services.AddKeyedScoped<IEcommerceSearchScrapperEngine, BiggieSearchScrapperEngine>("biggie");
     }
