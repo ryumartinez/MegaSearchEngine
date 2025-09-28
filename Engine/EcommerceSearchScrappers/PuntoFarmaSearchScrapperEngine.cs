@@ -2,7 +2,7 @@ using Engine.Contract;
 using Engine.Infrastructure;
 using Engine.Models;
 
-namespace Engine;
+namespace Engine.EcommerceSearchScrappers;
 
 public class PuntoFarmaSearchSearchScrapper(IBrowserFactory browser) : IEcommerceSearchScrapperEngine
 {

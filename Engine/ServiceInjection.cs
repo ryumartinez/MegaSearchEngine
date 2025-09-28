@@ -1,4 +1,5 @@
 ﻿using Engine.Contract;
+using Engine.EcommerceSearchScrappers;
 using Engine.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,5 +11,7 @@ public static class ServiceInjection
     { 
         services.AddPlaywrightBrowserFactory();
         services.AddKeyedScoped<IEcommerceSearchScrapperEngine, PuntoFarmaSearchSearchScrapper>("puntofarma");
+        services.AddKeyedScoped<IEcommerceSearchScrapperEngine, FarmaTotalSearchScrapperEngine>("farmaTotal");
+        services.AddKeyedScoped<IEcommerceSearchScrapperEngine, BiggieSearchScrapperEngine>("biggie");
     }
 }
