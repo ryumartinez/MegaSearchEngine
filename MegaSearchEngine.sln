@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proxy", "Proxy\Proxy.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Utils", "Utils\Utils.csproj", "{F6D009E8-2B00-4498-BCF3-B535FD7DBB75}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{13394595-D702-46F3-9A33-E56F1BE3CBF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{F6D009E8-2B00-4498-BCF3-B535FD7DBB75}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6D009E8-2B00-4498-BCF3-B535FD7DBB75}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6D009E8-2B00-4498-BCF3-B535FD7DBB75}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13394595-D702-46F3-9A33-E56F1BE3CBF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13394595-D702-46F3-9A33-E56F1BE3CBF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{13394595-D702-46F3-9A33-E56F1BE3CBF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{13394595-D702-46F3-9A33-E56F1BE3CBF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
