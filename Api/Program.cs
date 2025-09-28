@@ -7,11 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
-Manager.ServiceInjection.ConfigureServices(builder.Services);
 builder.Services.AddOptions<PlaywrightOptions>()
     .Bind(builder.Configuration.GetSection(PlaywrightOptions.SectionName))
     .ValidateDataAnnotations()
     .ValidateOnStart();
+Engine.ServiceInjection.ConfigureServices(builder.Services);
+Manager.ServiceInjection.ConfigureServices(builder.Services);
+
 
 var app = builder.Build();
 
