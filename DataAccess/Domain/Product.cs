@@ -1,8 +1,16 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace DataAccess.Domain;
 
 public class Product : BaseEntity
 {
-    public required string Title  { get; set; }
-    public required string Description  { get; set; }
-    public required string Link  { get; set; }
+    [Required]
+    [StringLength(100)]
+    public string? Title  { get; set; }
+    [Required]
+    [StringLength(100)]
+    public string? Description  { get; set; }
+    [Required]
+    [StringLength(100)]
+    public string? Link  { get; set; }
 }
