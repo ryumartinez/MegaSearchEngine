@@ -4,33 +4,57 @@ using Microsoft.Playwright;
 
 namespace DataAccess;
 
-public sealed class PlaywrightHtmlFetcher(IBrowserFactory browserFactory) : IHtmlFetcher
+public sealed class PlaywrightHtmlFetcher : IHtmlFetcher
 {
+    private readonly IBrowserFactory _browserFactory;
+
+    public PlaywrightHtmlFetcher(IBrowserFactory browserFactory)
+        => _browserFactory = browserFactory;
+
     public async Task<string> GetContentAsync(Uri url, CancellationToken ct = default)
     {
-        ArgumentNullException.ThrowIfNull(url);
-        var page = await browserFactory.CreatePageAsync().ConfigureAwait(false);
-        page.SetDefaultTimeout(15000);
-        await page.GotoAsync(url.ToString(), new PageGotoOptions { WaitUntil = WaitUntilState.DOMContentLoaded }).ConfigureAwait(false);
-        return await page.ContentAsync().ConfigureAwait(false);
+        // fallback to “no special wait”
+        return await GetContentAsync(url, readySelector: null, readyTimeoutMs: 0, ct).ConfigureAwait(false);
     }
 
-    public async Task<(string html, Uri? nextPage)> GetPagedContentAsync(Uri url, CancellationToken ct = default)
+    public async Task<string> GetContentAsync(Uri url, string? readySelector, int readyTimeoutMs = 15000, CancellationToken ct = default)
     {
         ArgumentNullException.ThrowIfNull(url);
-        var page = await browserFactory.CreatePageAsync().ConfigureAwait(false);
-        page.SetDefaultTimeout(15000);
-        await page.GotoAsync(url.ToString(), new PageGotoOptions { WaitUntil = WaitUntilState.DOMContentLoaded }).ConfigureAwait(false);
+        var page = await _browserFactory.CreatePageAsync().ConfigureAwait(false);
+        page.SetDefaultTimeout(20000);
 
-        // read HTML
-        var html = await page.ContentAsync().ConfigureAwait(false);
+        await page.GotoAsync(url.ToString(), new() { WaitUntil = WaitUntilState.DOMContentLoaded }).ConfigureAwait(false);
 
-        // try to discover "next" by rel or class
-        var nextHref = await page
-            .Locator("a[rel='next'], a.next")
-            .First
-            .GetAttributeAsync("href")
-            .ConfigureAwait(false);        var next = string.IsNullOrWhiteSpace(nextHref) ? null : new Uri(new Uri(url.GetLeftPart(UriPartial.Authority)), nextHref);
-        return (html, next);
+        // Key: wait like your old code did — for the site’s product selector — instead of poking at title/HTML during navigation.
+        if (!string.IsNullOrWhiteSpace(readySelector))
+        {
+            try
+            {
+                await page.Locator(readySelector).First.WaitForAsync(new()
+                {
+                    State = WaitForSelectorState.Visible,
+                    Timeout = readyTimeoutMs
+                }).ConfigureAwait(false);
+            }
+            catch (TimeoutException)
+            {
+                // Didn’t see the ready selector — return whatever we have so the caller can decide (parser can check).
+            }
+        }
+
+        return await SafeContentAsync(page).ConfigureAwait(false);
+    }
+
+    // If the page is changing right as we read content, retry briefly.
+    private static async Task<string> SafeContentAsync(IPage page)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            try { return await page.ContentAsync().ConfigureAwait(false); }
+            catch (PlaywrightException ex)
+                when (ex.Message.Contains("Execution context was destroyed", StringComparison.OrdinalIgnoreCase))
+            { await Task.Delay(200).ConfigureAwait(false); }
+        }
+        return await page.ContentAsync().ConfigureAwait(false);
     }
 }
