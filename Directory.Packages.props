@@ -6,8 +6,10 @@
     <PackageVersion Include="Aspire.Hosting.AppHost" Version="9.3.1" />
     <PackageVersion Include="Aspire.Hosting.Azure.KeyVault" Version="9.3.1" />
     <PackageVersion Include="Aspire.Hosting.NodeJs" Version="9.3.1" />
+    <PackageVersion Include="Aspire.Hosting.PostgreSQL" Version="9.5.0" />
     <PackageVersion Include="Aspire.Hosting.SqlServer" Version="9.3.2" />
     <PackageVersion Include="Aspire.Hosting.Testing" Version="9.3.1" />
+    <PackageVersion Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.5.0" />
     <PackageVersion Include="Bogus" Version="35.6.3" />
     <PackageVersion Include="coverlet.collector" Version="6.0.4" />
     <PackageVersion Include="HtmlAgilityPack" Version="1.12.2" />

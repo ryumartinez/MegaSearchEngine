@@ -11,9 +11,10 @@ builder.Services.AddOptions<PlaywrightOptions>()
     .Bind(builder.Configuration.GetSection(PlaywrightOptions.SectionName))
     .ValidateDataAnnotations()
     .ValidateOnStart();
+
+DataAccess.ServiceInjection.ConfigureDataAccess(builder);
 Engine.ServiceInjection.ConfigureServices(builder.Services);
 Manager.ServiceInjection.ConfigureServices(builder.Services);
-
 
 var app = builder.Build();
 

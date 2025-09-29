@@ -2,6 +2,14 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var keyVault = builder.AddAzureKeyVault("my-api-secrets");
 
+
+var postgres = builder
+    .AddPostgres("postgres")
+    .WithPgAdmin()
+    .WithPgWeb()
+    .WithDataVolume();
+var postgresdb = postgres.AddDatabase("postgresdb");
+
 var playwrightBrowser = builder
     .AddContainer("playwright-browser", "mcr.microsoft.com/playwright", "v1.54.0-noble")
     .WithContainerRuntimeArgs("--ipc=host", "--init", "--user", "pwuser")
@@ -15,6 +23,7 @@ var api = builder
     .AddProject<Projects.Api>("api")
     .WithReference(keyVault)
     .WithEnvironment("Playwright__CdpEndpoint", playwrightBrowser.GetEndpoint("cdp"))
+    .WithReference(postgresdb)
     .WaitFor(playwrightBrowser);
 
 builder
