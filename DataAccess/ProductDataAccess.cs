@@ -15,7 +15,7 @@ public class ProductDataAccess : IProductDataAccess
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Product>> GetAsync(FilterAccessRequest request)
+    public Task<IEnumerable<Product>> GetAsync(GetProductAccessRequest request)
     {
         throw new NotImplementedException();
     }

@@ -1,6 +1,6 @@
 namespace DataAccess.Contract;
 
-public record FilterAccessRequest(
+public record GetProductAccessRequest(
     int PageIndex,
     int PageSize,
     DateTime From,
