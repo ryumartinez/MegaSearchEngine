@@ -3,5 +3,6 @@
       <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" />
       <PackageReference Include="Microsoft.AspNetCore.Identity" />
+      <PackageReference Include="Microsoft.Playwright" />
     </ItemGroup>
 </Project>

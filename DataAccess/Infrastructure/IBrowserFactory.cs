@@ -1,6 +1,6 @@
 using Microsoft.Playwright;
 
-namespace Engine.Infrastructure;
+namespace DataAccess.Infrastructure;
 
 public interface IBrowserFactory
 {

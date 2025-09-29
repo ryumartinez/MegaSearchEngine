@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Engine.Infrastructure;
+namespace DataAccess.Infrastructure;
 
 public class PlaywrightOptions
 {
