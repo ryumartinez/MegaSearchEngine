@@ -1,3 +1,4 @@
+using DataAccess.Contract;
 using Engine.Contract;
 using Engine.Models;
 using Manager.Contract;
@@ -8,7 +9,8 @@ namespace Manager;
 public class SearchResultItemManager(
     [FromKeyedServices("puntoFarma")] IEcommerceSearchScrapperEngine puntoFarmaSearchDataAccess,
     [FromKeyedServices("farmaTotal")] IEcommerceSearchScrapperEngine farmaTotalSearchDataAccess,
-    [FromKeyedServices("biggie")] IEcommerceSearchScrapperEngine biggieSearchDataAccess
+    [FromKeyedServices("biggie")] IEcommerceSearchScrapperEngine biggieSearchDataAccess,
+    IProductDataAccess productDataAccess
     ) : ISearchResultItemManager
 {
     public async Task<IEnumerable<SearchResultItemModel>> GetAsync(string searchText)
@@ -32,5 +34,12 @@ public class SearchResultItemManager(
                 ));
 
         return mappedResult;
+    }
+
+    public async Task SyncAsync()
+    {
+        var items = await GetAsync("ibuprofeno").ConfigureAwait(false);
+        var products = items.Select(x => new CreateProductAccessRequest(x.Title, x.Description, x.Link));
+        await productDataAccess.AddRangeAsync(products).ConfigureAwait(false);
     }
 }
