@@ -104,6 +104,7 @@ public class SearchResultItemManager(
         return parsed.Select(p => new SearchResultItemModel(
             Title: p.Title,
             Description: p.Description,
-            Link: p.Link));
+            Link: p.Link,
+            SiteName: p.SiteName));
     }
 }
