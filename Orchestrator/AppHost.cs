@@ -31,4 +31,9 @@ builder
     .WithReference(api)
     .WaitFor(api);
 
+builder
+    .AddProject<Projects.Scheduler>("scheduler")
+    .WithReference(api)
+    .WaitFor(api);
+
 builder.Build().Run();
