@@ -13,7 +13,7 @@ internal static class SearchEndpoints
     
     private static async Task<IResult> Search(ISearchResultItemManager searchResultItemManager, [FromQuery] string searchText)
     {
-        var result = await searchResultItemManager.GetAsync(searchText).ConfigureAwait(false);
+        var result = await searchResultItemManager.GetAsync(new GetSearchResultItemRequest("")).ConfigureAwait(false);
         return Results.Ok(result);
     }
 }

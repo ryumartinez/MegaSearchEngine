@@ -6,11 +6,14 @@ public class Product : BaseEntity
 {
     [Required]
     [StringLength(100)]
-    public string? Title  { get; set; }
+    public required string Title  { get; set; }
     [Required]
     [StringLength(100)]
-    public string? Description  { get; set; }
+    public required string Description  { get; set; }
     [Required]
     [StringLength(100)]
-    public string? Link  { get; set; }
+    public required string Link  { get; set; }
+    [Required]
+    [StringLength(100)]
+    public required string SiteName  { get; set; }
 }

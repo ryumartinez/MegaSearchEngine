@@ -28,7 +28,35 @@ public class SearchResultItemManager(
     private const string FarmaTotalReadySelector = "div.product";
     private const string BiggieReadySelector     = "div.card-container";
 
-    public async Task<IEnumerable<SearchResultItemModel>> GetAsync(string searchText)
+    public async Task<GetSearchResultItemResponse> GetAsync(GetSearchResultItemRequest request)
+    {
+        var products = await productDataAccess.GetAsync(new GetProductAccessRequest()).ConfigureAwait(false);
+        var items = products.Select(x => new SearchResultItemModel(x.Title, x.Description, x.Link, x.SiteName));
+        var searchResultItemModels = items as SearchResultItemModel[] ?? items.ToArray();
+        var result = new GetSearchResultItemResponse(
+            TotalItems: searchResultItemModels.Length,
+            TotalBiggieItems: searchResultItemModels.Count(x => x.Title == BiggieSiteName),
+            TotalPuntoFarmaItems: searchResultItemModels.Count(x => x.Title == PuntoFarmaSiteName),
+            TotalFarmaTotalItems: searchResultItemModels.Count(x => x.Title == FarmaTotalSiteName),
+            Items: searchResultItemModels
+            );
+        return result;
+    }
+
+    public async Task SearchAndSaveAsync(string searchText)
+    {
+        var items = await FetchAndParseAsync(searchText).ConfigureAwait(false);
+
+        var requests = items.Select(x => new CreateProductAccessRequest(
+            Name: x.Title,
+            Description: x.Description,
+            Link: x.Link,
+            SiteName: x.SiteName));
+
+        await productDataAccess.AddRangeAsync(requests).ConfigureAwait(false);
+    }
+    
+    private async Task<IEnumerable<SearchResultItemModel>> FetchAndParseAsync(string searchText)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(searchText);
 
@@ -69,23 +97,6 @@ public class SearchResultItemManager(
         // Optional ordering
         return bag.Values.OrderBy(x => x.Title, StringComparer.OrdinalIgnoreCase);
     }
-
-    public async Task SyncAsync()
-    {
-        // TODO: move to config if needed
-        const string defaultQuery = "ibuprofeno";
-
-        var items = await GetAsync(defaultQuery).ConfigureAwait(false);
-
-        var requests = items.Select(x => new CreateProductAccessRequest(
-            Name: x.Title,
-            Description: x.Description,
-            Link: x.Link));
-
-        await productDataAccess.AddRangeAsync(requests).ConfigureAwait(false);
-    }
-
-    // ---------------- helpers ----------------
 
     private async Task<IEnumerable<SearchResultItemModel>> FetchAndParseAsync(
         string siteName,
