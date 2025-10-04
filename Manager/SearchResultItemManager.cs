@@ -15,6 +15,10 @@ public class SearchResultItemManager(
     IProductDataAccess productDataAccess
 ) : ISearchResultItemManager
 {
+    private const string PuntoFarmaSiteName = "PuntoFarma";
+    private const string FarmaTotalSiteName = "FarmaTotal";
+    private const string BiggieSiteName = "Biggie";
+    
     private const string PuntoFarmaBase = "https://www.puntofarma.com.py";
     private const string FarmaTotalBase = "https://www.farmatotal.com.py";
     private const string BiggieBase     = "https://biggie.com.py";
@@ -31,18 +35,21 @@ public class SearchResultItemManager(
         var tasks = new[]
         {
             FetchAndParseAsync(
+                PuntoFarmaSiteName,
                 new Uri($"{PuntoFarmaBase}/buscar?s={Uri.EscapeDataString(searchText)}"),
                 PuntoFarmaReadySelector,
                 15_000,
                 puntoFarmaParser),
 
             FetchAndParseAsync(
+                FarmaTotalSiteName,
                 new Uri($"{FarmaTotalBase}/?s={Uri.EscapeDataString(searchText)}&post_type=product"),
                 FarmaTotalReadySelector,
                 20_000,
                 farmaTotalParser),
 
             FetchAndParseAsync(
+                BiggieSiteName,
                 new Uri($"{BiggieBase}/search?q={Uri.EscapeDataString(searchText)}&c=0#result"),
                 BiggieReadySelector,
                 15_000,
@@ -81,6 +88,7 @@ public class SearchResultItemManager(
     // ---------------- helpers ----------------
 
     private async Task<IEnumerable<SearchResultItemModel>> FetchAndParseAsync(
+        string siteName,
         Uri url,
         string readySelector,
         int readyTimeoutMs,
@@ -91,7 +99,7 @@ public class SearchResultItemManager(
             .GetContentAsync(url, readySelector, readyTimeoutMs, ct)
             .ConfigureAwait(false);
 
-        var parsed = parser.ParseSearchHtml(html, url);
+        var parsed = parser.ParseSearchHtml(html, url, siteName);
 
         return parsed.Select(p => new SearchResultItemModel(
             Title: p.Title,

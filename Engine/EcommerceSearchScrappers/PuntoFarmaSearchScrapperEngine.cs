@@ -41,7 +41,7 @@ public sealed class PuntoFarmaParserEngine : IEcommerceParserEngine
             "del[class*='precioTachado']"
         };
 
-        public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl)
+        public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl, string siteName)
         {
             if (string.IsNullOrWhiteSpace(html))
                 yield break;
@@ -76,7 +76,8 @@ public sealed class PuntoFarmaParserEngine : IEcommerceParserEngine
                 yield return new EcommerceProductEngineModel(
                     Title: title!,
                     Description: description,
-                    Link: absoluteLink
+                    Link: absoluteLink,
+                    SiteName: siteName
                 );
             }
         }

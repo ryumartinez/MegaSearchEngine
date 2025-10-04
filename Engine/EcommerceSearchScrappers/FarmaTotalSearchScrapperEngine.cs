@@ -6,7 +6,7 @@ namespace Engine.EcommerceSearchScrappers;
 
 public sealed class FarmaTotalParserEngine : IEcommerceParserEngine
 {
-    public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl)
+    public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl, string siteName)
     {
         var doc = new AngleSharp.Html.Parser.HtmlParser().ParseDocument(html);
         foreach (var card in doc.QuerySelectorAll("div.product"))
@@ -22,7 +22,8 @@ public sealed class FarmaTotalParserEngine : IEcommerceParserEngine
                 yield return new EcommerceProductEngineModel(
                     Title: title!,
                     Description: priceText ?? string.Empty,
-                    Link: link!.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? link : new Uri(pageUrl, link).ToString()
+                    Link: link!.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? link : new Uri(pageUrl, link).ToString(),
+                    SiteName: siteName
                 );
         }
     }

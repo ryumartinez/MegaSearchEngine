@@ -36,7 +36,7 @@ public sealed class FarmacenterParserEngine : IEcommerceParserEngine
             ".price"                            // broad fallback
         };
 
-        public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl)
+        public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl, string siteName)
         {
             if (string.IsNullOrWhiteSpace(html))
                 yield break;
@@ -61,7 +61,8 @@ public sealed class FarmacenterParserEngine : IEcommerceParserEngine
                 yield return new EcommerceProductEngineModel(
                     Title: title!,
                     Description: priceText,
-                    Link: link
+                    Link: link,
+                    SiteName: siteName
                 );
             }
         }

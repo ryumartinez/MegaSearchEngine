@@ -35,7 +35,7 @@ public sealed class BiggieParserEngine : IEcommerceParserEngine
             "span[class*='price'], span:matches(^\\s*[₲$€R$]|\\d+[.,]\\d{2}\\s*[₲$€])"
         };
 
-        public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl)
+        public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl, string siteName)
         {
             ArgumentNullException.ThrowIfNull(pageUrl);
             ArgumentNullException.ThrowIfNull(html);
@@ -62,7 +62,8 @@ public sealed class BiggieParserEngine : IEcommerceParserEngine
                 yield return new EcommerceProductEngineModel(
                     Title: titleText!,
                     Description: priceText ?? string.Empty,
-                    Link: link
+                    Link: link,
+                    SiteName: siteName
                 );
             }
         }
