@@ -42,6 +42,19 @@ public class SearchResultItemManager(
             );
         return result;
     }
+    
+    public async Task SearchAndSaveManyAsync(IEnumerable<string> searchTexts, CancellationToken ct = default)
+    {
+        ArgumentNullException.ThrowIfNull(searchTexts);
+
+        foreach (var term in searchTexts.Where(s => !string.IsNullOrWhiteSpace(s))
+                     .Select(s => s.Trim())
+                     .Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            ct.ThrowIfCancellationRequested();
+            await SearchAndSaveAsync(term).ConfigureAwait(false);
+        }
+    }
 
     public async Task SearchAndSaveAsync(string searchText)
     {
