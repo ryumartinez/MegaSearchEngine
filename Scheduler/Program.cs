@@ -10,7 +10,10 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
 });
-builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("api", client =>
+{
+    client.BaseAddress = new("https+http://api");
+});
 builder.Services.AddHostedService<DailyPostService>();
 
 var app = builder.Build();
