@@ -1,7 +1,10 @@
 using System.Text.Json.Serialization;
 using Scheduler.Services;
+using Utils;
 
 var builder = WebApplication.CreateSlimBuilder(args);
+
+builder.AddServiceDefaults();
 
 builder.Services.ConfigureHttpJsonOptions(options =>
 {

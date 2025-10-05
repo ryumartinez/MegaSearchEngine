@@ -8,4 +8,8 @@
         <PublishAot>true</PublishAot>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Utils\Utils.csproj" />
+    </ItemGroup>
+
 </Project>
