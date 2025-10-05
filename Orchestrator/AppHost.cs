@@ -24,7 +24,9 @@ var api = builder
     .WithReference(keyVault)
     .WithEnvironment("Playwright__CdpEndpoint", playwrightBrowser.GetEndpoint("cdp"))
     .WithReference(postgresdb)
-    .WaitFor(playwrightBrowser);
+    .WaitFor(playwrightBrowser)
+    .WaitFor(postgresdb)
+    .WaitFor(keyVault);
 
 builder
     .AddProject<Projects.Proxy>("proxy")
