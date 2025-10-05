@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Scheduler.Services;
 
 var builder = WebApplication.CreateSlimBuilder(args);
 
@@ -6,6 +7,8 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 {
     options.SerializerOptions.TypeInfoResolverChain.Insert(0, AppJsonSerializerContext.Default);
 });
+builder.Services.AddHttpClient();
+builder.Services.AddHostedService<DailyPostService>();
 
 var app = builder.Build();
 
