@@ -5,9 +5,7 @@ var keyVault = builder.AddAzureKeyVault("my-api-secrets");
 
 var postgres = builder
     .AddPostgres("postgres")
-    .WithPgAdmin()
-    .WithPgWeb()
-    .WithDataVolume();
+    .WithPgAdmin();
 var postgresdb = postgres.AddDatabase("postgresdb");
 
 var playwrightBrowser = builder
