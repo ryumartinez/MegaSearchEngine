@@ -1,5 +1,6 @@
 using Api.Endpoints;
-using Engine.Infrastructure;
+using DataAccess.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using Utils;
 
@@ -18,10 +19,16 @@ Manager.ServiceInjection.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+// Apply any pending migrations
+await dbContext.Database.MigrateAsync().ConfigureAwait(false);
+
 // Configure the HTTP request pipeline.
 app.MapOpenApi();
 app.MapScalarApiReference();
 app.UseHttpsRedirection();
 app.MapSearchEndpoints();
 
-app.Run();
+await app.RunAsync().ConfigureAwait(false);

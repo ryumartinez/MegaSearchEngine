@@ -5,9 +5,7 @@ var keyVault = builder.AddAzureKeyVault("my-api-secrets");
 
 var postgres = builder
     .AddPostgres("postgres")
-    .WithPgAdmin()
-    .WithPgWeb()
-    .WithDataVolume();
+    .WithPgAdmin();
 var postgresdb = postgres.AddDatabase("postgresdb");
 
 var playwrightBrowser = builder
@@ -24,10 +22,17 @@ var api = builder
     .WithReference(keyVault)
     .WithEnvironment("Playwright__CdpEndpoint", playwrightBrowser.GetEndpoint("cdp"))
     .WithReference(postgresdb)
-    .WaitFor(playwrightBrowser);
+    .WaitFor(playwrightBrowser)
+    .WaitFor(postgresdb)
+    .WaitFor(keyVault);
 
 builder
     .AddProject<Projects.Proxy>("proxy")
+    .WithReference(api)
+    .WaitFor(api);
+
+builder
+    .AddProject<Projects.Scheduler>("scheduler")
     .WithReference(api)
     .WaitFor(api);
 

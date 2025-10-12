@@ -10,7 +10,10 @@ public static class ServiceInjection
     public static void ConfigureDataAccess(IHostApplicationBuilder builder)
     {
         ArgumentNullException.ThrowIfNull(builder);
+        builder.Services.AddHttpContextAccessor();
         builder.AddNpgsqlDbContext<AppDbContext>(connectionName: "postgresdb");
-        builder.Services.AddScoped<IProductDataAccess, ProductDataAccess>();
+        builder.Services.AddScoped<IProductDataAccess, ProductDataAccess>(); 
+        builder.Services.AddPlaywrightBrowserFactory();
+        builder.Services.AddScoped<IHtmlFetcher, PlaywrightHtmlFetcher>();
     }
 }

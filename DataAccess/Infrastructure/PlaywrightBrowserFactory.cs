@@ -2,7 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.Playwright;
 
-namespace Engine.Infrastructure;
+namespace DataAccess.Infrastructure;
 
 public static class PlaywrightBrowserFactory
 {

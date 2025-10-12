@@ -1,50 +1,111 @@
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
+using AngleSharp.Html.Parser;
 using Engine.Contract;
-using Engine.Infrastructure;
 using Engine.Models;
 
 namespace Engine.EcommerceSearchScrappers;
 
 //TODO: Bypass Site Block
-public class FarmacenterSearchScrapperEngine(IBrowserFactory browser) : IEcommerceSearchScrapperEngine
-{
-    private const string BaseUrl = "https://www.farmacenter.com.py";
-
-    public async Task<IEnumerable<EcommerceProductEngineModel>> ScrappeSearchAsync(string searchTerm)
+public sealed class FarmacenterParserEngine : IEcommerceParserEngine
     {
-        var page = await browser.CreatePageAsync().ConfigureAwait(false);
-        var searchUrl = $"{BaseUrl}/catalogo?q={Uri.EscapeDataString(searchTerm)}";
-        await page.GotoAsync(searchUrl).ConfigureAwait(false);
+        private readonly HtmlParser _parser = new();
 
-        // Wait for the first product card to be visible on the page.
-        await page.WaitForSelectorAsync("div.product").ConfigureAwait(false);
-
-        var resultElements = await page.QuerySelectorAllAsync("div.product").ConfigureAwait(false);
-            
-        var searchResults = new List<EcommerceProductEngineModel>();
-        foreach (var element in resultElements)
+        // Primary selectors (with a couple of fallbacks in case classes change)
+        private static readonly string[] CardSelectors =
         {
-            // Extract the title and the relative link from the main product link element.
-            var linkElement = await element.QuerySelectorAsync("a.ecommercepro-LoopProduct-link").ConfigureAwait(false);
-            var title = linkElement is not null ? await linkElement.GetAttributeAsync("title").ConfigureAwait(false) : string.Empty;
-            var relativeLink = linkElement is not null ? await linkElement.GetAttributeAsync("href").ConfigureAwait(false) : string.Empty;
+            "div.product",                      // primary
+            "li.product",                       // common Woo-like fallback
+            "div[class*='product']"             // broad fallback
+        };
 
-            // Extract the final price, which is inside a span with class 'price'.
-            var priceElement = await element.QuerySelectorAsync("span.price span.amount").ConfigureAwait(false);
-            var priceText = priceElement is not null ? await priceElement.InnerTextAsync().ConfigureAwait(false) : string.Empty;
-                
-            // Use the extracted price as the description.
-            var description = priceText;
-                
-            if (!string.IsNullOrWhiteSpace(relativeLink) && !string.IsNullOrWhiteSpace(title))
+        private static readonly string[] LinkSelectors =
+        {
+            "a.ecommercepro-LoopProduct-link",  // primary from your scraper
+            "a.woocommerce-LoopProduct-link",
+            "a[href*='/producto/'], a[href*='/product/']",
+            "a[href]"
+        };
+
+        // Price: primary amount selector + common fallbacks
+        private static readonly string[] PriceSelectors =
+        {
+            "span.price span.amount",           // primary from your scraper
+            "span.price ins .amount",           // promo price (ins)
+            "span.price .amount",               // generic amount
+            ".price"                            // broad fallback
+        };
+
+        public IEnumerable<EcommerceProductEngineModel> ParseSearchHtml(string html, Uri pageUrl, string siteName)
+        {
+            if (string.IsNullOrWhiteSpace(html))
+                yield break;
+
+            var doc = _parser.ParseDocument(html);
+
+            foreach (var card in QueryFirstAvailable(doc, CardSelectors))
             {
-                searchResults.Add(new EcommerceProductEngineModel(
-                    Title: title.Trim(),
-                    Description: description.Trim(),
-                    // Combine the base URL with the relative link to form a full, clickable URL.
-                    Link: $"{BaseUrl}/{relativeLink}"
-                ));
+                // Link & title
+                var a = FirstMatch(card, LinkSelectors) as IHtmlAnchorElement;
+                var title = Clean(a?.Title) ?? Clean(a?.TextContent);
+                var href  = a?.Href ?? a?.GetAttribute("href");
+
+                if (string.IsNullOrWhiteSpace(title) || string.IsNullOrWhiteSpace(href))
+                    continue;
+
+                var link = ResolveUrl(pageUrl, href!);
+
+                // Price text (keep raw for description)
+                var priceText = Clean(TextOfFirst(card, PriceSelectors)) ?? string.Empty;
+
+                yield return new EcommerceProductEngineModel(
+                    Title: title!,
+                    Description: priceText,
+                    Link: link,
+                    SiteName: siteName
+                );
             }
         }
-        return searchResults;
+
+        // ----------------- helpers -----------------
+
+        private static IEnumerable<IElement> QueryFirstAvailable(IParentNode scope, params string[] selectors)
+        {
+            foreach (var sel in selectors)
+            {
+                var found = scope.QuerySelectorAll(sel);
+                if (found.Length > 0) return found;
+            }
+            return Array.Empty<IElement>();
+        }
+
+        private static IElement? FirstMatch(IElement scope, string[] selectors)
+        {
+            foreach (var sel in selectors)
+            {
+                var el = scope.QuerySelector(sel);
+                if (el != null) return el;
+            }
+            return null;
+        }
+
+        private static string? TextOfFirst(IElement scope, string[] selectors)
+        {
+            foreach (var sel in selectors)
+            {
+                var el = scope.QuerySelector(sel);
+                if (el != null) return el.TextContent;
+            }
+            return null;
+        }
+
+        private static string ResolveUrl(Uri pageUrl, string href)
+        {
+            if (Uri.TryCreate(href, UriKind.Absolute, out var abs)) return abs.ToString();
+            return new Uri(pageUrl, href).ToString();
+        }
+
+        private static string? Clean(string? s)
+            => string.IsNullOrWhiteSpace(s) ? null : s.Replace("\u00A0", " ", StringComparison.InvariantCulture).Trim();
+        
     }
-}
