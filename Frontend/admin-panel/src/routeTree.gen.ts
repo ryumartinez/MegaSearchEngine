@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SettingsIndexRouteImport } from './routes/settings/index'
 import { Route as OrdersIndexRouteImport } from './routes/orders/index'
 import { Route as EventsIndexRouteImport } from './routes/events/index'
 import { Route as OrdersIdRouteImport } from './routes/orders/$id'
@@ -18,6 +19,11 @@ import { Route as EventsIdRouteImport } from './routes/events/$id'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OrdersIndexRoute = OrdersIndexRouteImport.update({
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/orders/$id': typeof OrdersIdRoute
   '/events': typeof EventsIndexRoute
   '/orders': typeof OrdersIndexRoute
+  '/settings': typeof SettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/orders/$id': typeof OrdersIdRoute
   '/events': typeof EventsIndexRoute
   '/orders': typeof OrdersIndexRoute
+  '/settings': typeof SettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,13 +70,27 @@ export interface FileRoutesById {
   '/orders/$id': typeof OrdersIdRoute
   '/events/': typeof EventsIndexRoute
   '/orders/': typeof OrdersIndexRoute
+  '/settings/': typeof SettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/events/$id' | '/orders/$id' | '/events' | '/orders'
+  fullPaths:
+    | '/'
+    | '/events/$id'
+    | '/orders/$id'
+    | '/events'
+    | '/orders'
+    | '/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/events/$id' | '/orders/$id' | '/events' | '/orders'
-  id: '__root__' | '/' | '/events/$id' | '/orders/$id' | '/events/' | '/orders/'
+  to: '/' | '/events/$id' | '/orders/$id' | '/events' | '/orders' | '/settings'
+  id:
+    | '__root__'
+    | '/'
+    | '/events/$id'
+    | '/orders/$id'
+    | '/events/'
+    | '/orders/'
+    | '/settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -77,6 +99,7 @@ export interface RootRouteChildren {
   OrdersIdRoute: typeof OrdersIdRoute
   EventsIndexRoute: typeof EventsIndexRoute
   OrdersIndexRoute: typeof OrdersIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +109,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/orders/': {
@@ -125,6 +155,7 @@ const rootRouteChildren: RootRouteChildren = {
   OrdersIdRoute: OrdersIdRoute,
   EventsIndexRoute: EventsIndexRoute,
   OrdersIndexRoute: OrdersIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
