@@ -2,6 +2,9 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 var keyVault = builder.AddAzureKeyVault("my-api-secrets");
 
+var jaeger = builder.AddContainer("jaeger", "cr.jaegertracing.io/jaegertracing/jaeger", "latest")
+    .WithHttpEndpoint(name: "jaeger-ui", targetPort: 16686)
+    .WithEndpoint(name: "otlp", targetPort: 4317, scheme: "http");
 
 var postgres = builder
     .AddPostgres("postgres")
