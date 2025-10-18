@@ -73,6 +73,8 @@ public class SearchResultItemManager(
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(searchText);
 
+        using var activity = InstrumentationHelper.Source.StartActivity("ProcessingGetData");
+
         var tasks = new[]
         {
             FetchAndParseAsync(
