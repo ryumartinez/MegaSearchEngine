@@ -13,6 +13,9 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 builder.Services.AddHttpClient("api", client =>
 {
     client.BaseAddress = new("https+http://api");
+}).AddStandardResilienceHandler(options =>
+{
+    options.TotalRequestTimeout.Timeout = TimeSpan.FromMinutes(3);
 });
 builder.Services.AddHostedService<DailyPostService>();
 
