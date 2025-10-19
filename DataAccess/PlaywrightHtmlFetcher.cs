@@ -60,6 +60,7 @@ public sealed class PlaywrightHtmlFetcher : IHtmlFetcher
 
             var content = await SafeContentAsync(page, activity).ConfigureAwait(false);
             activity?.SetTag("http.response_content_length", content.Length);
+            activity?.SetTag("http.response_content", content);
             activity?.SetStatus(ActivityStatusCode.Ok);
             return content;
         }
