@@ -63,7 +63,8 @@ public static class AspireExtensions
                     // Uncomment the following line to enable gRPC instrumentation (requires the OpenTelemetry.Instrumentation.GrpcNetClient package)
                     //.AddGrpcClientInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddSource("manager");
+                    .AddSource("manager")
+                    .AddSource("DataAccess.Playwright");
             });
 
         _ = builder.AddOpenTelemetryExporters();
