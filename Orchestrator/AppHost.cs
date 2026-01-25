@@ -10,6 +10,7 @@ var postgres = builder
     .AddPostgres("postgres")
     .WithPgAdmin();
 var postgresdb = postgres.AddDatabase("postgresdb");
+var tickerqdb = postgres.AddDatabase("tickerq-db");
 
 var playwrightBrowser = builder
     .AddContainer("playwright-browser", "mcr.microsoft.com/playwright", "v1.54.0-noble")
@@ -33,13 +34,15 @@ var api = builder
     .WithEnvironment("OTEL_EXPORTER_OTLP_ENDPOINT", $"{openObserve.GetEndpoint("ui")}/api/default") 
     .WithEnvironment("OTEL_EXPORTER_OTLP_HEADERS", "Authorization=Basic YWRtaW5AZXhhbXBsZS5jb206Q29tcGxleFBhc3MxMjM=")
     .WithEnvironment("OTEL_EXPORTER_OTLP_PROTOCOL", "http/protobuf")
+    .WithReference(tickerqdb)
     .WithReference(keyVault)
     .WithEnvironment("Playwright__CdpEndpoint", playwrightBrowser.GetEndpoint("cdp"))
     .WithReference(postgresdb)
     .WaitFor(openObserve)
     .WaitFor(playwrightBrowser)
     .WaitFor(postgresdb)
-    .WaitFor(keyVault);
+    .WaitFor(keyVault)
+    .WaitFor(tickerqdb);
 
 builder
     .AddProject<Projects.Proxy>("proxy")
