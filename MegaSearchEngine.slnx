@@ -1,4 +1,9 @@
 <Solution>
+  <Folder Name="/Documentation/">
+    <File Path="Docs/Architecture.md" />
+    <File Path="Docs/Infrastructure.md" />
+    <File Path="Docs/OpenObserve-Setup.md" />
+  </Folder>
   <Project Path="Api/Api.csproj" />
   <Project Path="DataAccess/DataAccess.csproj" />
   <Project Path="Engine/Engine.csproj" />
