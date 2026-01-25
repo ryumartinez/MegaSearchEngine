@@ -54,7 +54,7 @@ public sealed class PlaywrightHtmlFetcher : IHtmlFetcher
                 catch (TimeoutException ex)
                 {
                     activity?.AddEvent(new ActivityEvent("Selector wait timed out"));
-                    activity?.RecordException(ex); // Record it as a non-fatal exception
+                    activity?.AddException(ex); // Record it as a non-fatal exception
                 }
             }
 
@@ -67,7 +67,7 @@ public sealed class PlaywrightHtmlFetcher : IHtmlFetcher
         catch (Exception ex)
         {
             // This catches fatal exceptions and marks the activity as failed.
-            activity?.RecordException(ex);
+            activity?.AddException(ex);
             activity?.SetStatus(ActivityStatusCode.Error, "Failed to fetch page content");
             throw;
         }

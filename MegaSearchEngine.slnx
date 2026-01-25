@@ -1,0 +1,10 @@
+<Solution>
+  <Project Path="Api/Api.csproj" />
+  <Project Path="DataAccess/DataAccess.csproj" />
+  <Project Path="Engine/Engine.csproj" />
+  <Project Path="Manager/Manager.csproj" />
+  <Project Path="Orchestrator/Orchestrator.csproj" />
+  <Project Path="Proxy/Proxy.csproj" />
+  <Project Path="Scheduler/Scheduler.csproj" />
+  <Project Path="Utils/Utils.csproj" />
+</Solution>

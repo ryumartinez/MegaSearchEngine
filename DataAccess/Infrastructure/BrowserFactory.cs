@@ -30,7 +30,7 @@ public class BrowserFactory : IBrowserFactory
         catch (Exception ex)
         {
             // If something goes wrong, record the exception on the activity
-            activity?.RecordException(ex);
+            activity?.AddException(ex);
             activity?.SetStatus(ActivityStatusCode.Error, "Failed to create browser page");
             throw;
         }
