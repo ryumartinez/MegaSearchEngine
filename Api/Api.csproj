@@ -4,6 +4,11 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi"/>
         <PackageReference Include="Scalar.AspNetCore"/>
+        <PackageReference Include="TickerQ" />
+        <PackageReference Include="TickerQ.Dashboard" />
+        <PackageReference Include="TickerQ.EntityFrameworkCore" />
+        <PackageReference Include="TickerQ.Instrumentation.OpenTelemetry" />
+        <PackageReference Include="TickerQ.Utilities" />
     </ItemGroup>
 
     <ItemGroup>
