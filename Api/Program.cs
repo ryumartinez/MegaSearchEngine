@@ -47,11 +47,16 @@ Manager.ServiceInjection.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
-using var scope = app.Services.CreateScope();
-var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+using (var scope = app.Services.CreateScope())
+{
+    // 1. Migrate your main app database (Keep this as MigrateAsync)
+    var appDbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await appDbContext.Database.MigrateAsync().ConfigureAwait(false);
 
-// Apply any pending migrations
-await dbContext.Database.MigrateAsync().ConfigureAwait(false);
+    // 2. FORCE create the TickerQ schema without using migrations
+    var tickerQDbContext = scope.ServiceProvider.GetRequiredService<TickerQDbContext>();
+    await tickerQDbContext.Database.EnsureCreatedAsync().ConfigureAwait(false); 
+}
 
 // Configure the HTTP request pipeline.
 app.MapOpenApi();
