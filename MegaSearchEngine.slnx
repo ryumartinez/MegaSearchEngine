@@ -10,6 +10,5 @@
   <Project Path="Manager/Manager.csproj" />
   <Project Path="Orchestrator/Orchestrator.csproj" />
   <Project Path="Proxy/Proxy.csproj" />
-  <Project Path="Scheduler/Scheduler.csproj" />
   <Project Path="Utils/Utils.csproj" />
 </Solution>
